@@ -28,7 +28,7 @@ while True: # Loop until key interupt
 
     # Create a TCP/IP socket for recieving
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    TCP_IP = 'localhost'
+    TCP_IP = '0.0.0.0'
     TCP_PORT = 5005
     sock.bind((TCP_IP, TCP_PORT))
     sock.listen(1)
