@@ -3,17 +3,16 @@ import socket
 import struct
 import sys
 
+# Create a TCP/IP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+TCP_IP = '119.9.21.113'
+TCP_PORT = 5005
+sock.bind((TCP_IP, TCP_PORT))
+sock.listen(1)
+
+unpacker = struct.Struct('15f')
+
 while True:
-    # Create a TCP/IP socket for recieving
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    TCP_IP = '119.9.21.113'
-    TCP_PORT = 5005
-    # Create a struct to unpack data
-    unpacker = struct.Struct('15f')
-    # Listen for client
-    sock.bind((TCP_IP, TCP_PORT))
-    sock.listen(1)
-        
     print >>sys.stderr, '\nwaiting for a connection'
     connection, client_address = sock.accept()
     try:
