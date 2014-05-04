@@ -3,7 +3,7 @@ import socket
 import struct
 import sys
 
-while True
+while True:
     # Create a TCP/IP socket for recieving
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     TCP_IP = '119.9.21.113'
