@@ -1,24 +1,25 @@
-#!/usr/bin/env python
-
+import binascii
 import socket
-import web
+import struct
+import sys
 
-#Server (port 5005)
-TCP_IP = '0.0.0.0'
-TCP_PORT = 5005
-BUFFER_SIZE = 1024
+# Create a TCP/IP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_address = ('localhost', 10000)
+sock.bind(server_address)
+sock.listen(1)
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((TCP_IP, TCP_PORT))
-s.listen(1)
+unpacker = struct.Struct('f, f, f, f, f, f, f, f, f, f, f, f, f, f, f')
 
-unpacker = struct.Struct('f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, ')
-conn, addr = s.accept()
-print 'Connection address:', addr
-while 1:
-    data = conn.recv(BUFFER_SIZE)
-    if not data: break
-    unpacked_data = unpacker.unpack(data)
-    print "received data:", unpacked_data
-    conn.send(unpacked_data)  # echo
-conn.close()
+while True:
+    print >>sys.stderr, '\nwaiting for a connection'
+    connection, client_address = sock.accept()
+    try:
+        data = connection.recv(unpacker.size)
+        print >>sys.stderr, 'received "%s"' % binascii.hexlify(data)
+
+        unpacked_data = unpacker.unpack(data)
+        print >>sys.stderr, 'unpacked:', unpacked_data
+        
+    finally:
+        connection.close()
