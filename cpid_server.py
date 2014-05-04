@@ -1,34 +1,26 @@
-#CPID - Cloud Based PID controller
-#James Carthew 2014
-#jamesrobertcarthew@gmail.com
-import ConfigParser
+import binascii
+import socket
+import struct
+import sys
 
-def cpid(error, timeStamp, seqNum):
+# Create a TCP/IP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+TCP_IP = '119.9.21.113'
+TCP_PORT = 5005
+sock.bind((TCP_IP, TCP_PORT))
+sock.listen(1)
 
-#read PID gains from gains.conf
-    config = ConfigParser.RawConfigParser()
-    config.read('gains.conf')
-    kP = config.get('gains', 'kP')
-    kI = config.get('gains', 'kI')
-    kD = config.get('gains', 'kD')
-#print Incomming Values
-    print ("Incomming Error:  "+str(error).strip('[]'))
-    print ("Time Stamp:       "+str(timeStamp).strip('[]'))
-    print ("Sequence Number:  "+str(seqNum).strip('[]'))    
-#PID Controller
-#u(t) = kP*e(t) + kI*integral(e(tau)) + kD*(d/dt)e(t)
-    
-#Proportional Controller Effort and LPF: kP*e(t)
-    pCE = kP*error[0]
-#Integral Controller Effort and LPF: kI*integral(e(tau))
-    iCE = kI*sum(error)
-#Derivative Controller Effort and LPF: kD*(d/dt)e(t)
-    dCE = kD*(error[0]-error[1])
-    print pCE
-    print iCE
-    print dCE
-#Return
-    return (pCE+iCE+dCE)
+unpacker = struct.Struct('15f')
 
-effort = cpid([1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4])
-print ("Control Effort:   " + effort)
+while True:
+    print >>sys.stderr, '\nwaiting for a connection'
+    connection, client_address = sock.accept()
+    try:
+        data = connection.recv(unpacker.size)
+        print >>sys.stderr, 'received "%s"' % binascii.hexlify(data)
+
+        unpacked_data = unpacker.unpack(data)
+        print >>sys.stderr, 'unpacked:', unpacked_data
+        
+    finally:
+        connection.close()
