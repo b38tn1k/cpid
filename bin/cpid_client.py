@@ -4,12 +4,13 @@ import struct
 import sys
 
 # Create a TCP/IP socket
+TCP_IP = '119.9.21.113'
+TCP_PORT = 5005
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('localhost', 10000)
-sock.connect(server_address)
+sock.connect((TCP_IP, TCP_PORT))
 
 values = (1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5)
-packer = struct.Struct('f, f, f, f, f, f, f, f, f, f, f, f, f, f, f')
+packer = struct.Struct('15f')
 packed_data = packer.pack(*values)
 
 try:
