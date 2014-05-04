@@ -5,11 +5,12 @@ import sys
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('localhost', 10000)
-sock.bind(server_address)
+TCP_IP = '119.9.21.113'
+TCP_PORT = 5005
+sock.bind((TCP_IP, TCP_PORT))
 sock.listen(1)
 
-unpacker = struct.Struct('f, f, f, f, f, f, f, f, f, f, f, f, f, f, f')
+unpacker = struct.Struct('15f')
 
 while True:
     print >>sys.stderr, '\nwaiting for a connection'
