@@ -22,7 +22,7 @@ while True:
         unpacked_data = unpacker.unpack(data)
         print >>sys.stderr, 'unpacked:', unpacked_data
 
-        connection.send(unpacked_data)
+        connection.send('yup')
         
     finally:
         connection.close()
