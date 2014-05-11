@@ -30,8 +30,7 @@ while True:
 
         errorList = unpacker.unpack(data)
         print >>sys.stderr, 'unpacked:', errorList
-        print "debug message:'
-
+        print "debug message:"
         print errorList[3]
 
         #PID Control
