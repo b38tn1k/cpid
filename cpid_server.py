@@ -30,11 +30,11 @@ while True:
 
         errorList = unpacker.unpack(data)
         print >>sys.stderr, 'unpacked:', errorList
-        print "debug message:"
-        print errorList[3]
 
         #PID Control
         Integral=sum(errorList[0:5])
+        print "debug message:"
+        print Integral
         effort = kP*errorList[1] + kI*(Integral) + kD*(errorList[1]-errorList[2])
         packed_data = packer.pack(*effort)
         connection.send(packed_data)

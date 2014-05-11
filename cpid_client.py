@@ -19,8 +19,8 @@ while True:
         # Send data
         print >>sys.stderr, 'sending...'
         sock.send(packed_data)
-        confirm = sock.recv(3);
-        print confirm
+        effort = sock.recv(3);
+        print effort
         
     finally:
         print >>sys.stderr, 'closing socket'
