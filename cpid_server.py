@@ -2,6 +2,14 @@ import binascii
 import socket
 import struct
 import sys
+import ConfigParser
+
+
+config = ConfigParser.RawConfigParser()
+config.read('gains.conf')
+kP = config.get('gains', 'kP')
+kI = config.get('gains', 'kI')
+kD = config.get('gains', 'kD')
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -11,6 +19,7 @@ sock.bind((TCP_IP, TCP_PORT))
 sock.listen(1)
 
 unpacker = struct.Struct('15f')
+packer = struct.Struct('1f')
 
 while True:
     print >>sys.stderr, '\nwaiting for a connection'
@@ -19,10 +28,13 @@ while True:
         data = connection.recv(unpacker.size)
         print >>sys.stderr, 'received "%s"' % binascii.hexlify(data)
 
-        unpacked_data = unpacker.unpack(data)
-        print >>sys.stderr, 'unpacked:', unpacked_data
+        errorList = unpacker.unpack(data)
+        print >>sys.stderr, 'unpacked:', errorList
 
-        connection.send('yup')
+        #PID Control
+        effort = kP*errorList[1] + kI*(sum(errorList[0:5])) + kD*(errorList[1]-errorList[2])
+        packed_data = packer.pack(*effort)
+        connection.send(packed_data)
         
     finally:
         connection.close()
