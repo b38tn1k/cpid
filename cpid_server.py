@@ -35,7 +35,8 @@ while True:
         Integral=float(sum(errorList[0:5]))
         Diff=float(errorList[1]-errorList[2])
         effort = kP*float(errorList[1]) + kI*Integral + kD*Diff
-        packed_data = packer.pack(*effort)
+        #this is crashing - figure out how to return a float!
+        packed_data = packer.pack(effort)
         connection.send(packed_data)
         
     finally:
