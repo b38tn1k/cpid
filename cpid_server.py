@@ -31,6 +31,8 @@ while True:
         errorList = unpacker.unpack(data)
         print >>sys.stderr, 'unpacked:', errorList
 
+        print errorList[3]
+
         #PID Control
         effort = kP*errorList[1] + kI*(sum(errorList[0:5])) + kD*(errorList[1]-errorList[2])
         packed_data = packer.pack(*effort)
