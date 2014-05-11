@@ -21,6 +21,8 @@ while True:
 
         unpacked_data = unpacker.unpack(data)
         print >>sys.stderr, 'unpacked:', unpacked_data
+
+        connection.send(unpacked_data(1))
         
     finally:
         connection.close()
