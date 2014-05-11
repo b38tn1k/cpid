@@ -7,9 +7,9 @@ import ConfigParser
 
 config = ConfigParser.RawConfigParser()
 config.read('gains.conf')
-(float) kP = config.get('gains', 'kP')
-(float) kI = config.get('gains', 'kI')
-(float) kD = config.get('gains', 'kD')
+kP = float(config.get('gains', 'kP'))
+kI = float(config.get('gains', 'kI'))
+kD = float(config.get('gains', 'kD'))
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
