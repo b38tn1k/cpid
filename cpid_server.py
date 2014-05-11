@@ -32,11 +32,9 @@ while True:
         print >>sys.stderr, 'unpacked:', errorList
 
         #PID Control
-        Integral=sum(errorList[0:5])
-        print "DIFF"
-        Diff=errorList[1]-errorList[2]
-        print Diff
-        effort = kP*errorList[1] + kI*Integral + kD*Diff
+        Integral=float(sum(errorList[0:5]))
+        Diff=float(errorList[1]-errorList[2])
+        effort = kP*float(errorList[1]) + kI*Integral + kD*Diff
         packed_data = packer.pack(*effort)
         connection.send(packed_data)
         
