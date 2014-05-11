@@ -24,3 +24,4 @@ while True:
         
     finally:
         connection.close()
+        print 'close'
