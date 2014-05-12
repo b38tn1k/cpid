@@ -26,7 +26,8 @@ while True:
     connection, client_address = sock.accept()
     try:
         data = connection.recv(unpacker.size)
-        print >>sys.stderr, 'received "%s"' % binascii.hexlify(data)
+        #print >>sys.stderr, 'received "%s"' % binascii.hexlify(data)
+        print 'recieving'
 
         errorList = unpacker.unpack(data)
         print >>sys.stderr, 'unpacked:', errorList
@@ -36,7 +37,7 @@ while True:
         Diff=float(errorList[1]-errorList[2])
         effort = kP*float(errorList[1]) + kI*Integral + kD*Diff
         print 'effort: "%s"' % effort
-        #this is crashing - figure out how to return a float!
+
         packed_data = packer.pack(effort)
         connection.send(packed_data)
         

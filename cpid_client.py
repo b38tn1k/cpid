@@ -23,7 +23,7 @@ while True:
         sock.send(packed_data)
         data = sock.recv(unpacker.size);
         effort = unpacker.unpack(data)
-        print effort
+        print 'effort: "%s"' % effort
         
     finally:
         print >>sys.stderr, 'closing socket'
