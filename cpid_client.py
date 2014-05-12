@@ -14,12 +14,15 @@ while True:
     values = (1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5)
     packer = struct.Struct('15f')
     packed_data = packer.pack(*values)
+    unpacker = struct.Struct('1f')
+    
     
     try:
         # Send data
         print >>sys.stderr, 'sending...'
         sock.send(packed_data)
-        effort = sock.recv(3);
+        data = sock.recv(unpacker.size);
+        effort = unpacker.unpack(data)
         print effort
         
     finally:
