@@ -8,6 +8,8 @@ import time
 TCP_IP = 'cpid.io'
 TCP_PORT = 5005
 while True:
+
+    start_time = time.time()
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((TCP_IP, TCP_PORT))
     #pack error, time code, sequence number into a struct to simplify send
@@ -28,5 +30,6 @@ while True:
     finally:
         print >>sys.stderr, 'closing socket'
         sock.close()
+        print time.time() - start_time, "seconds"
 
 
