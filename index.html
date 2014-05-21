@@ -12,14 +12,41 @@
 <body>
 <img src="http://i.imgur.com/CIn1hwZ.png" title="cpid.io"/></a>
 
-<h3>Welcome to the cpid.io homepage</h3>
+<h2>Welcome to the cpid.io homepage</h2>
+<h3>
+<a href="#about"> About</a> &#160;&#160;&#160;
+<a href="#tutorial"> Tutorial </a> &#160;&#160;&#160;
+<a href =href="https://github.com/jamesrobertcarthew/cpid"> Github</a>&#160;&#160;&#160;
+</h3>
 
-<p style= "width: 50%;">
+<h3><a name="about"> About </a></h3>
+<p style= "width: 60%;">
 A Cloud Based PID Controller intended to demonstrate the possibilities of applying web-based services to robotics. A PID controller is to be designed to operate on a host server and provide control data to a client via the Internet. As the controller will have to operate in real time, packet loss and network latency will have to be accounted for. A client account will allow developers to choose gain values for the PID controller. The server and the client will have different data communication responsibilities during operation.
 </p>
-<img src="http://i.imgur.com/LBPCYi7.png" title="A Pretty Picture"/>
-<p style= "width: 50%;">
+<img src="http://i.imgur.com/LBPCYi7.png" title="Server/Client Communication"/>
+<p style= "width: 60%;">
 Error is calculated on the client side of the Internet to minimise latency and allow the client to dynamically change set point. A server based PID controller will be complemented with a simple linear predictor that utilises the current latency value in an attempt to time the arrival of a control effort data packet at the client in such a way that minimises error. Both the Control Effort and Error data will be sent accompanied by a time code and sequence number to allow for packet confirmation.
 </p>
+
+<h3><a name="tutorial"> Tutorial </a></h3>
+<p style= "width: 60%;">
+The following tutorial operates as a guide to get cpid.io controlling a DC motor using a rotary encoder as a sensor.
+Modifying the source code it is possible to apply cpid.io in the same way a normal PID controller is utilised.
+You will need:
+
+<ul type="disc">
+<li> An <a href="www.arduino.cc">  Arduino Uno and the Arduino IDE </a></li>
+<li> An Optical Rotary Encoder and DC Motor</li>
+<li>Source code available from <a href =href="https://github.com/jamesrobertcarthew/cpid"> Github</a></li>
+<li><a href="https://www.python.org/downloads/"> Python 2.7 </a> and <a href="pyserial.sourceforge.net"> pySerial </a></a></li>
+<li> The DC Motor shaft is to be attached to the Rotary 
+<li> Connect the Arduino via USB </li>
+<li> Load the Arduino sketch "cpid_test.ino" from the downloaded source code pack</li>
+<li> Connect the Encoder, DC motor and Arduino as shown below:</li>
+<img src="http://imgur.com/buzQnTJ.jpg" title="Placeholder Arduino Image" width="300"/>
+<li> Run the Python script "cpid_client.py" - you may have to change the COM port pyserial operates on
+</p>
+
+
 <a href="https://github.com/jamesrobertcarthew/cpid"><img src="https://github.global.ssl.fastly.net/images/modules/logos_page/GitHub-Mark.png" title="Fork Me!" height="60" width="60"/></a>
 </body>
