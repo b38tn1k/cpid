@@ -19,7 +19,7 @@ TCP_PORT = 5005
 sock.bind((TCP_IP, TCP_PORT))
 sock.listen(1)
 
-unpacker = struct.Struct('15f')
+unpacker = struct.Struct('4f')
 packer = struct.Struct('1f')
 
 while True:
