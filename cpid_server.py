@@ -32,7 +32,7 @@ while True:
         print 'recieving'
 
         errList = unpacker.unpack(data)
-        print >>sys.stderr, 'unpacked:', errorList
+        print >>sys.stderr, 'unpacked:', errList
 
         #PID Control
         effort = kP*errList[1] + kI*(errList[2]+errList[1]) + kD*(errList[1]-errList[3])
