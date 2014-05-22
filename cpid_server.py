@@ -22,6 +22,7 @@ unpacker = struct.Struct('15f')
 packer = struct.Struct('1f')
 
 while True:
+    start_time = time.time()
     print >>sys.stderr, '\nwaiting for a connection'
     connection, client_address = sock.accept()
     try:
@@ -44,3 +45,4 @@ while True:
     finally:
         connection.close()
         print 'close'
+        print time.time() - start_time, "seconds"
