@@ -5,7 +5,8 @@ import sys
 import time
 
 err = 1
-lpTm = 0
+lpTm = errSum = errLast = seqNum = 0
+
 
 # Create a TCP/IP socket
 TCP_IP = 'cpid.io'
