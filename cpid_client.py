@@ -5,6 +5,7 @@ import sys
 import time
 
 err = 1
+lpTm = 0
 
 # Create a TCP/IP socket
 TCP_IP = 'cpid.io'
@@ -15,7 +16,7 @@ while True:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((TCP_IP, TCP_PORT))
     #pack error, time code, sequence number into a struct to simplify send
-    values = (err, errSum, errLast lpTm, seqNum)
+    values = (err, errSum, errLast, lpTm, seqNum)
     packer = struct.Struct('5f')
     packed_data = packer.pack(*values)
     unpacker = struct.Struct('1f')
