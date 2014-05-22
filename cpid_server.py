@@ -3,6 +3,7 @@ import socket
 import struct
 import sys
 import ConfigParser
+import time
 
 
 config = ConfigParser.RawConfigParser()
