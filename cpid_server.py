@@ -31,13 +31,11 @@ while True:
         #print >>sys.stderr, 'received "%s"' % binascii.hexlify(data)
         print 'recieving'
 
-        errorList = unpacker.unpack(data)
+        errList = unpacker.unpack(data)
         print >>sys.stderr, 'unpacked:', errorList
 
         #PID Control
-        Integral=float(sum(errorList[0:5]))
-        Diff=float(errorList[1]-errorList[2])
-        effort = kP*float(errorList[1]) + kI*Integral + kD*Diff
+        effort = kP*errList[1] + kI*(errList[2]+errList[1]) + kD*(errList[1]-errList[3])
         print 'effort: "%s"' % effort
 
         packed_data = packer.pack(effort)
