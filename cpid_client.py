@@ -4,18 +4,18 @@ import struct
 import sys
 import time
 
-def cpid(err):
 
 
 
-    err = 1
-    lpTm = errSum = errLast = seqNum = 0
+err = 1
+lpTm = errSum = errLast = seqNum = 0
 
 
-    # Create a TCP/IP socket
-    TCP_IP = 'cpid.io'
-    TCP_PORT = 5005
+# Create a TCP/IP socket
+TCP_IP = 'cpid.io'
+TCP_PORT = 5005
 
+while True:
     start_time = time.time()
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((TCP_IP, TCP_PORT))
@@ -43,6 +43,5 @@ def cpid(err):
         errSum += (err*lpTm)
         print lpTm, "seconds"
 
-    return[effort]
 
 
