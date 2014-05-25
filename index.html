@@ -32,37 +32,35 @@ Error is calculated on the client side of the Internet to minimise latency and a
 <h3><a name="tutorial"> Tutorial </a></h3>
 <p style= "width: 60%;">
 The following tutorial operates as a guide to get cpid.io controlling a DC motor using a rotary encoder as a sensor.
-Modifying the source code it is possible to apply cpid.io in the same way any normal PID controller is utilised. Note this system does not allow for reversing of the DC Motor and thus underdamped control responses are not observable.
+Modifying the source code it is possible to apply cpid.io in the same way any normal PID controller is utilised. 
 You will need: 
 
 <ul type="disc">
-<li> An <a href="www.arduino.cc">  Arduino Uno and the Arduino IDE </a></li>
-<li> An Optical Rotary Encoder and DC Motor</li>
-<li>Source code available from <a href =href="https://github.com/jamesrobertcarthew/cpid"> Github</a></li>
+<li> An <a href="http://www.arduino.cc">  Arduino Uno and the Arduino IDE </a></li>
+<li> An Optical Rotary Encoder, a <a href="http://www.freetronics.com/hbridge">Freetronics H-Bridge Motor Driver Shield</a> and a DC Motor</li>
+<li>Source code available from <a href="https://github.com/jamesrobertcarthew/cpid"> Github</a></li>
 <li> Please check the <a href="#development"> Current Limitations </a>section and update source code accordingly </li>
-<li><a href="https://www.python.org/downloads/"> Python 2.7 </a> and <a href="pyserial.sourceforge.net"> pySerial </a></a></li>
-<li>A suitable NPN transistor (in this case a 2N3904, a 2N2222 would be more appropriate) regulates power to the DC Motor </li>
-<li> The resistor value recommended is 270 Ohm. In this case a 5k Ohm resistor was utilised to similar effect.</li>
+<li><a href="https://www.python.org/downloads/"> Python 2.7 </a> and <a href="http://pyserial.sourceforge.net"> pySerial </a></a></li>
+
 </ul>
 To create a basic rig and start experimenting with cpid.io:
 <ul type="disc">
 <li> The DC Motor shaft is coupled with the Rotary Encoder shaft via a 3D printed shaft coupler.
+<li> Connect the H-Bridge Shield to the Arduino </li>
 <li> Connect the Arduino via USB</li>
 <li> Load the Arduino sketch "cpid_test.ino" from the downloaded source code pack</li>
 <li> Connect the Encoder, DC motor and Arduino as shown below:</li>
 </ul>
-<img src="http://i.imgur.com/RI6YMvl.png" title="Fritzing Breadboard Layout" width="600"/>
+<img src="http://i.imgur.com/CqF3GkB.jpg" title="A Mess" width="600"/>
 <ul type="disc">
-<li> The DC Motor is connected to pin 6 and is controlled via PWM. </li>
-<li> Connect Rotary Encoder Pulse A output to digital pin 4 and Pulse B to digital pin 2</li>
+<li> The DC Motor is connected to Output A of the H-Bridge Shield. </li>
+<li> Connect Rotary Encoder Pulse A output to digital pin 8 and Pulse B to digital pin 2</li>
 <li> Run "cpid_client.py" - you may have to change the COM port pyserial operates over </li>
 </ul>
-<img src="http://i.imgur.com/rEyXRuy.jpg" title="A Mess" width="600"/>
-
 </p>
 
 <h3><a name="development"> Current Limitations </a></h3>
 <p style= "width: 60%;">
-As of May 2014  <a href="cpid.io"> cpid.io </a>does not include multithreading capability. Whilst cpid.io was developed such that no error tracking is performed on the server and each control action is calculated independently of previous values, the fact that the PID gains can only be modified through the gains.conf file means that only one PID controller is available at one time. To counteract this issue one must change all references to external IPs to <a href="127.0.0.1"> 127.0.0.1 </a> and run the server and client functions on the same local machine.  </p>
+As of May 2014  <a href="http://cpid.io"> cpid.io </a>does not include multithreading capability. Whilst cpid.io was developed such that no error tracking is performed on the server and each control action is calculated independently of previous values, the fact that the PID gains can only be modified through the gains.conf file means that only one PID controller is available at one time. To counteract this issue one must change all references to external IPs to <a href="http://127.0.0.1"> 127.0.0.1 </a> and run the server and client functions on the same local machine.  </p>
 <a href="https://github.com/jamesrobertcarthew/cpid"><img src="https://github.global.ssl.fastly.net/images/modules/logos_page/GitHub-Mark.png" title="Fork Me!" height="60" width="60"/></a>
 </body>
