@@ -4,13 +4,12 @@ import struct
 import sys
 import time
 import serial
-import threading
 
 SetPoint = 500
 
 lpTm = errSum = errLast = seqNum = err = val = effort = 0
 #serial connection with Arduino
-ser = serial.Serial('/dev/tty.usbmodem26411', 9600)
+ser = serial.Serial('/dev/tty.usbmodem641', 115200)
 # Create a TCP/IP socket
 TCP_IP = 'cpid.io'
 TCP_PORT = 5005
@@ -23,8 +22,15 @@ print('Setup Complete')
 
 while True:
     start_time = time.time()
-    #read in error here
+    
+    #read in position from Arduino here
     err = 10
+    if(ser.inWaiting()>0):
+        print('Reading')
+        Pos = ser.readline()
+        print Pos
+
+    #read in position from Arduino here
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((TCP_IP, TCP_PORT))
     #pack error, time code, sequence number into a struct to simplify send
@@ -42,7 +48,9 @@ while True:
         effort = unpacker.unpack(data)
         #print 'effort: "%s"' % effort
         effort = int(effort[0])
-        # send effort here
+        # send effort to Arduino here
+
+        # send effort to Arduino here
         
     finally:
         print >>sys.stderr, 'closing socket'
