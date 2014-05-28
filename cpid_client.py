@@ -5,9 +5,9 @@ import sys
 import time
 import serial
 
-SetPoint = 100
-lpTm = 1
-errSum = errLast = seqNum = err = effort = Pos = OldPos = velIn = 0
+SetPoint = 500
+
+lpTm = errSum = errLast = seqNum = err = val = effort = Pos = OldPos = 0
 #serial connection with Arduino
 ser = serial.Serial('/dev/tty.usbmodem641', 9600)
 # Create a TCP/IP socket
@@ -26,20 +26,16 @@ while True:
     #read in position from Arduino here
 
     if ser.inWaiting()>2:
-        print('\nReading New Position')
+        print('Reading')
         neg = ser.read()
         Pos = ser.read()
         Pos = ord(Pos)+ord(ser.read())*256
         if ord(neg) == 1: Pos = -Pos
         ser.flushInput()
-        print 'Position: ' + str(Pos)
-        velIn = (OldPos - Pos)/(10*lpTm)
-        print 'Velocity: ' + str(velIn) + '\n'
-        OldPos = Pos
+        print 'pos: ' + str(Pos)
+        //velocity old-new / time
 
-    err = SetPoint - velIn
-    print 'Setpoint: ' + str(SetPoint)
-    print 'Error: ' + str(err)
+    err = Pos
     #read in position from Arduino here
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((TCP_IP, TCP_PORT))
@@ -58,7 +54,7 @@ while True:
         effort = unpacker.unpack(data)
         #print 'effort: "%s"' % effort
         effort = int(effort[0])
-        print 'Effort: ' + str(effort)
+        #print effort
         # send effort to Arduino here
 
         # send effort to Arduino here
@@ -70,7 +66,7 @@ while True:
     errLast = err
     lpTm = time.time() - start_time
     errSum += (err*lpTm)
-    print 'Loop Time: ' + str(lpTm), "seconds"
+    print lpTm, "seconds"
 
 
 
