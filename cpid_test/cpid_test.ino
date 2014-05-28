@@ -4,7 +4,7 @@ const int channel_a_input_1 = 4;
 const int channel_a_input_2 = 7;
 const int encoderPinA = 2;
 const int encoderPinB = 8;
-int Pos, oldPos, Vel;
+int Pos, oldPos, Vel, negflag;
 volatile int encoderPos = 0; // variables changed within interrupts are volatile
 unsigned long lastMillis;
 void setup()
@@ -34,6 +34,11 @@ void loop()
   uint8_t oldSREG = SREG;
   cli();
   Pos = encoderPos;
+  
+  if (Pos%1000 ==0){ //hacky way to prevent apparant empty byte
+    Pos = Pos+1;
+  }
+  
   SREG = oldSREG;
   if(millis() > lastMillis+100)
   {
@@ -46,20 +51,21 @@ void loop()
     Serial.write('/n');
     oldPos = Pos;
     lastMillis = millis();
-    Vel = 100;
+    negflag = Serial.read();
+    Vel = Serial.read();
+    if(negflag ==2){
+      Vel = -1*Vel;
+    }
     writeMotor(Vel);
   }
 
-
-  // Delay(1000);
-
 }
-
+/////////////////////
 int isNegative(int x){
   if (x<0) return 1;
   else return 0;
 }
-
+/////////////////////
 void doEncoder()
 {
   if (digitalRead(encoderPinA) == digitalRead(encoderPinB))
@@ -67,7 +73,7 @@ void doEncoder()
   else
     encoderPos--; //count down if pins are different
 }
-
+/////////////////////
 void writeMotor(int Vel)
 {
   if(Vel < 0){ //this is flipped so encoder output makes sense

@@ -5,7 +5,7 @@ import sys
 import time
 import serial
 
-SetPoint = 100
+SetPoint = 50
 lpTm = 1
 errSum = errLast = seqNum = err = effort = Pos = OldPos = velIn = 0
 #serial connection with Arduino
@@ -22,9 +22,16 @@ print('Setup Complete')
 
 while True:
     start_time = time.time()
-    
-    #read in position from Arduino here
-
+    #write effort to Arduino
+    #hacky error catching and negative number byte send
+    negflag = 1
+    if (effort<0):
+        negflag = 2
+    if(abs(effort)>255):
+        effort = 255
+    ser.write(chr(negflag))
+    ser.write(chr(abs(effort)))
+    #read in position from Arduino
     if ser.inWaiting()>2:
         print('Reading New Position')
         neg = ser.read()
@@ -33,7 +40,7 @@ while True:
         if ord(neg) == 1: Pos = -Pos
         ser.flushInput()
         print 'Position: ' + str(Pos)
-        velIn = (OldPos - Pos)/lpTm
+        velIn = (OldPos - Pos)/(10*lpTm)
         print 'Velocity: ' + str(velIn)
         OldPos = Pos
 
