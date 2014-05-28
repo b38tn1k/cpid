@@ -9,7 +9,7 @@ SetPoint = 500
 
 lpTm = errSum = errLast = seqNum = err = val = effort = Pos = OldPos = 0
 #serial connection with Arduino
-ser = serial.Serial('/dev/tty.usbmodem641', 9600)
+ser = serial.Serial('/dev/tty.usbmodem411', 9600)
 # Create a TCP/IP socket
 TCP_IP = '127.0.0.1' #'cpid.io'
 TCP_PORT = 5005
@@ -33,7 +33,7 @@ while True:
         if ord(neg) == 1: Pos = -Pos
         ser.flushInput()
         print 'pos: ' + str(Pos)
-        //velocity old-new / time
+        #velocity old-new / time
 
     err = Pos
     #read in position from Arduino here
