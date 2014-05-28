@@ -33,7 +33,7 @@ while True:
         if ord(neg) == 1: Pos = -Pos
         ser.flushInput()
         print 'pos: ' + str(Pos)
-        //velocity old-new / time
+        #velocity old-new / time
 
     err = Pos
     #read in position from Arduino here
