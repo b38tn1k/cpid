@@ -58,7 +58,7 @@ while True:
         effort = unpacker.unpack(data)
         #print 'effort: "%s"' % effort
         effort = int(effort[0])
-        #print effort
+        print 'Control Effort: ' + str(effort)
         # send effort to Arduino here
 
         # send effort to Arduino here
@@ -71,6 +71,3 @@ while True:
     lpTm = time.time() - start_time
     errSum += (err*lpTm)
     print 'Loop Time: ' + str(lpTm), "seconds"
-
-
-
