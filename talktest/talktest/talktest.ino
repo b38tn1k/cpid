@@ -52,8 +52,9 @@ void loop()
 
   {
     char a,b;
-    a = Pos;
-    b = Pos >> 8;
+    a = abs(Pos);
+    b = abs(Pos >> 8);
+    Serial.write(isNegative(Pos));
     Serial.write(a);
     Serial.write(b);
     Serial.write('/n');
@@ -65,6 +66,11 @@ void loop()
 
  // Delay(1000);
 
+}
+
+int isNegative(int x){
+  if (x<0) return 1;
+  else return 0;
 }
 
 void doEncoder()
