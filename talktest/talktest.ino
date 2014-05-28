@@ -1,28 +1,89 @@
-  int Pos = 0;
-  unsigned long lastSend = 0;
-  unsigned long time;
-  unsigned long interval = 1000;
+/*
 
-void setup() {
-  Serial.begin(9600);  
+ RotaryEncoderInterrupt sketch
+ 
+ */
+
+const int encoderPinA = 2;
+
+const int encoderPinB = 8;
+
+int Pos, oldPos;
+
+volatile int encoderPos = 0; // variables changed within interrupts are volatile
+unsigned long lastMillis;
+void setup()
+
+{
+
+  pinMode(encoderPinA, INPUT);
+
+  pinMode(encoderPinB, INPUT);
+
+  digitalWrite(encoderPinA, HIGH);
+
+  digitalWrite(encoderPinB, HIGH);
+
+  Serial.begin(9600);
+
+  attachInterrupt(1, doEncoder, FALLING); // encoder pin on interrupt 0 (pin 2)
+  
+  Serial.println("Setup Complete");
+  digitalWrite(13, HIGH);
+  delay(1000);
+  digitalWrite(13, LOW);
+  Serial.println("yes");
+  lastMillis = millis();
 }
 
-void loop() {
-  if ((lastSend + interval) > time){
-    Serial.print(Pos);
-    Serial.print("\n");
-    lastSend = time; //will reset after 50 days
+void loop()
+
+{
+
+  uint8_t oldSREG = SREG;
+
+  cli();
+
+  Pos = encoderPos;
+
+  SREG = oldSREG;
+
+  if(millis() > lastMillis+100)
+
+  {
+    char a,b;
+    a = abs(Pos);
+    b = abs(Pos >> 8);
+    Serial.write(isNegative(Pos));
+    Serial.write(a);
+    Serial.write(b);
+    Serial.write('/n');
+
+    oldPos = Pos;
+    lastMillis = millis();
   }
-  time = millis();
-  Pos +=1;
+  
+
+ // Delay(1000);
 
 }
 
+int isNegative(int x){
+  if (x<0) return 1;
+  else return 0;
+}
 
+void doEncoder()
 
+{
 
+  if (digitalRead(encoderPinA) == digitalRead(encoderPinB))
 
+    encoderPos++; // count up if both encoder pins are the same
 
+  else
 
+      encoderPos--; //count down if pins are different
 
+}
 

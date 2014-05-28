@@ -9,7 +9,7 @@ SetPoint = 100
 lpTm = 1
 errSum = errLast = seqNum = err = effort = Pos = OldPos = velIn = 0
 #serial connection with Arduino
-ser = serial.Serial('/dev/tty.usbmodem641', 9600)
+ser = serial.Serial('/dev/tty.usbmodem411', 9600)
 # Create a TCP/IP socket
 TCP_IP = '127.0.0.1' #'cpid.io'
 TCP_PORT = 5005
