@@ -5,6 +5,7 @@ import sys
 import time
 import serial
 
+
 SetPoint = 50
 lpTm = 1
 errSum = errLast = seqNum = err = effort = Pos = OldPos = velIn = 0
@@ -31,6 +32,7 @@ while True:
         effort = 255
     ser.write(chr(negflag))
     ser.write(chr(abs(effort)))
+    ser.flushOutput()
     #read in position from Arduino
     if ser.inWaiting()>2:
         print('Reading New Position')
@@ -58,22 +60,20 @@ while True:
 
 
     try:
-        # Send data
+        #send data
         print >>sys.stderr, 'sending...'
         sock.send(packed_data)
+        #recieve data
         data = sock.recv(unpacker.size);
         effort = unpacker.unpack(data)
-        #print 'effort: "%s"' % effort
         effort = int(effort[0])
         print 'Control Effort: ' + str(effort)
-        # send effort to Arduino here
-
-        # send effort to Arduino here
         
     except:
         print >>sys.stderr, 'closing socket'
         sock.close()
     seqNum += 1
+    print 'Sequence Number: ' + str(seqNum)
     errLast = err
     lpTm = time.time() - start_time
     errSum += (err*lpTm)
