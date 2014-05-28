@@ -7,7 +7,7 @@ import serial
 
 SetPoint = 500
 
-lpTm = errSum = errLast = seqNum = err = val = effort = Pos1 = 0
+lpTm = errSum = errLast = seqNum = err = val = effort = Pos = OldPos = 0
 #serial connection with Arduino
 ser = serial.Serial('/dev/tty.usbmodem641', 9600)
 # Create a TCP/IP socket
@@ -28,13 +28,14 @@ while True:
     if ser.inWaiting()>2:
         print('Reading')
         neg = ser.read()
-        Pos1 = ser.read()
-        Pos1 = ord(Pos1)+ord(ser.read())*256
-        if ord(neg) == 1: Pos1 = -Pos1
+        Pos = ser.read()
+        Pos = ord(Pos)+ord(ser.read())*256
+        if ord(neg) == 1: Pos = -Pos
         ser.flushInput()
-        print 'pos: ' + str(Pos1)
+        print 'pos: ' + str(Pos)
+        //velocity old-new / time
 
-    err = Pos1
+    err = Pos
     #read in position from Arduino here
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((TCP_IP, TCP_PORT))
