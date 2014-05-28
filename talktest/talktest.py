@@ -26,8 +26,7 @@ while True:
     if(ser.inWaiting()>0):
         Pos = ser.readline()
         print Pos
-    ser.write(i)
-    i+=1
+
 
 
 

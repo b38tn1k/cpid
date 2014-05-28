@@ -14,6 +14,7 @@ unsigned long interval = 300;
 
 void setup() {
   Serial.begin(9600);  
+  Serial.println("Begun");
   delay(1000);
   pinMode(encoderPinA, INPUT); 
   pinMode(encoderPinB, INPUT); 
@@ -24,42 +25,49 @@ void setup() {
   pinMode( channel_a_input_1, OUTPUT ); // Channel A input 1
   pinMode( channel_a_input_2, OUTPUT ); // Channel A input 2
 
-  attachInterrupt(0, doEncoder, FALLING); 
+  attachInterrupt(1, doEncoder, FALLING); 
+  interrupts();
+  noInterrupts();
+  Serial.println('Finished setup');
+  interrupts(); 
 }
 
 void loop() {
   uint8_t oldSREG = SREG;
-  cli();
+  //cli();
   Pos = encoderPos; 
   SREG = oldSREG; 
-  
-  if ((lastSend + interval) > time){
+  //Serial.println("In loop");
+  if ((lastSend + interval) < time){
+    noInterrupts();
     Serial.print(Pos);
     Serial.print("\n");
-    Pos+=1;
     lastSend = time; //will reset after 50 days
+    Serial.flush();
+    interrupts();
   }
-  time = millis();
   
+  //Serial.println(1);
+  time = millis();
   //Vel = Serial.read();
 
-  if(Vel < 0){ //this is flipped so encoder output makes sense
-    analogWrite( channel_a_enable, Vel);
-    digitalWrite( channel_a_input_1, HIGH);
-    digitalWrite( channel_a_input_2, LOW);
-  } 
-  else {
-    analogWrite( channel_a_enable, -1*Vel);
-    digitalWrite( channel_a_input_1, LOW);
-    digitalWrite( channel_a_input_2, HIGH);
-  }
+//  if(Vel < 0){ //this is flipped so encoder output makes sense
+//    analogWrite( channel_a_enable, Vel);
+//    digitalWrite( channel_a_input_1, HIGH);
+//    digitalWrite( channel_a_input_2, LOW);
+//  } 
+//  else {
+//    analogWrite( channel_a_enable, -1*Vel);
+//    digitalWrite( channel_a_input_1, LOW);
+//    digitalWrite( channel_a_input_2, HIGH);
+//  }
 
-  if(Pos>1000){ //basic H-Bridge test
-    Vel = -100;
-  }
-  if(Pos<0){
-    Vel = 100;
-  }
+  //  if(Pos>1000){ //basic H-Bridge test
+  //    Vel = -100;
+  //  }
+  //  if(Pos<0){
+  //    Vel = 100;
+  //  }
 }
 
 void doEncoder() {
@@ -67,9 +75,11 @@ void doEncoder() {
   if (digitalRead(encoderPinA) == digitalRead(encoderPinB))
     encoderPos++; 
   else
-    encoderPos--; 
+    encoderPos--;
+  //Serial.println(encoderPos);
   interrupts();
 }
+
 
 
 

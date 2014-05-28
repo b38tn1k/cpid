@@ -14,7 +14,7 @@ void loop() {
     lastSend = time; //will reset after 50 days
   }
   time = millis();
-  Pos = Serial.read();
+  Pos +=1;
 
 }
 

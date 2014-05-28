@@ -7,11 +7,11 @@ import serial
 
 SetPoint = 500
 
-lpTm = errSum = errLast = seqNum = err = val = effort = 0
+lpTm = errSum = errLast = seqNum = err = val = effort = Pos = 0
 #serial connection with Arduino
-ser = serial.Serial('/dev/tty.usbmodem641', 115200)
+ser = serial.Serial('/dev/tty.usbmodem641', 9600)
 # Create a TCP/IP socket
-TCP_IP = 'cpid.io'
+TCP_IP = '127.0.0.1' #'cpid.io'
 TCP_PORT = 5005
 
 ###############################
@@ -24,12 +24,15 @@ while True:
     start_time = time.time()
     
     #read in position from Arduino here
-    err = 10
-    if(ser.inWaiting()>0):
-        print('Reading')
-        Pos = ser.readline()
-        print Pos
 
+    if ser.inWaiting()>1:
+        print('Reading')
+        Pos1 = ser.read()
+        Pos1 = ord(Pos1)+ord(ser.read())*256
+        ser.flushInput()
+        print 'pos: ' + str(Pos1)
+
+    err = Pos1
     #read in position from Arduino here
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((TCP_IP, TCP_PORT))
@@ -48,18 +51,19 @@ while True:
         effort = unpacker.unpack(data)
         #print 'effort: "%s"' % effort
         effort = int(effort[0])
+        #print effort
         # send effort to Arduino here
 
         # send effort to Arduino here
         
-    finally:
+    except:
         print >>sys.stderr, 'closing socket'
         sock.close()
-        seqNum += 1
-        errLast = err
-        lpTm = time.time() - start_time
-        errSum += (err*lpTm)
-        print lpTm, "seconds"
+    seqNum += 1
+    errLast = err
+    lpTm = time.time() - start_time
+    errSum += (err*lpTm)
+    print lpTm, "seconds"
 
 
 

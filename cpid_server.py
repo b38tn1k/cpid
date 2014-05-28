@@ -14,7 +14,7 @@ kD = float(config.get('gains', 'kD'))
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-TCP_IP = '119.9.21.113'
+TCP_IP = '127.0.0.1' #'119.9.21.113'
 TCP_PORT = 5005
 sock.bind((TCP_IP, TCP_PORT))
 sock.listen(1)
@@ -40,7 +40,8 @@ while True:
 
         packed_data = packer.pack(effort)
         connection.send(packed_data)
-        
+    except:
+        pass
     finally:
         connection.close()
         print 'close'
