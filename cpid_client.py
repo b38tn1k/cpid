@@ -26,15 +26,15 @@ while True:
     #read in position from Arduino here
 
     if ser.inWaiting()>2:
-        print('Reading New Position')
+        print('\nReading New Position')
         neg = ser.read()
         Pos = ser.read()
         Pos = ord(Pos)+ord(ser.read())*256
         if ord(neg) == 1: Pos = -Pos
         ser.flushInput()
         print 'Position: ' + str(Pos)
-        velIn = (OldPos - Pos)/lpTm
-        print 'Velocity: ' + str(velIn)
+        velIn = (OldPos - Pos)/(10*lpTm)
+        print 'Velocity: ' + str(velIn) + '\n'
         OldPos = Pos
 
     err = SetPoint - velIn
@@ -58,7 +58,7 @@ while True:
         effort = unpacker.unpack(data)
         #print 'effort: "%s"' % effort
         effort = int(effort[0])
-        #print effort
+        print 'Effort: ' + str(effort)
         # send effort to Arduino here
 
         # send effort to Arduino here
