@@ -16,7 +16,7 @@ outTXT.write('Output: ')
 timeTXT = open('Time.txt', 'w')
 timeTXT.write('Time: ')
 #serial connection with Arduino
-ser = serial.Serial('/dev/tty.usbmodem641', 9600)
+ser = serial.Serial('/dev/tty.usbmodem641', 115200)
 #initialise values
 SetPoint = 100
 lpTm = 1
