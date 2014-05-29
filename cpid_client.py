@@ -1,27 +1,27 @@
+###############################
+############CPID###############
+###############################
 import binascii
 import socket
 import struct
 import sys
 import time
 import serial
-
-
-
-SetPoint = 100
-lpTm = 1
-VelScale = 12 #value to scale encoder with H-Bridge/DC Motor
-errSum = errLast = seqNum = err = effort = Pos = OldPos = Vel = OldVel = 0
 # Create a TCP/IP socket
 TCP_IP = '127.0.0.1' #'cpid.io'
 TCP_PORT = 5005
+#Create output files
 outTXT = open('OutPut.txt', 'w')
-outTXT.write('hi')
+outTXT.write('Output: ')
 timeTXT = open('Time.txt', 'w')
-###############################
-############CPID###############
-###############################
+timeTXT.write('Time: ')
 #serial connection with Arduino
 ser = serial.Serial('/dev/tty.usbmodem641', 9600)
+#initialise values
+SetPoint = 100
+lpTm = 1
+VelScale = 12 #value to scale encoder with H-Bridge/DC Motor
+errSum = errLast = seqNum = err = effort = Pos = OldPos = Vel = OldVel = clTm = 0
 print('Setup Complete')
 
 while True:
@@ -35,9 +35,8 @@ while True:
         effort = 255
         
     #write effort to Arduino
-    ser.write(chr(negflag))
-    ser.write(chr(abs(effort)))
-    ser.flushOutput()
+    ser.write(bytes(chr(negflag)))
+    ser.write(bytes(chr(abs(effort))))
     
     #read in position from Arduino
     if ser.inWaiting()>2:
@@ -56,7 +55,9 @@ while True:
         OldVel = Vel
         print 'Velocity: ' + str(Vel)
         OldPos = Pos
+        
     err = SetPoint - Vel
+    #err = SetPoint - Pos
     #empty value jitter
     if(err == 0):
         err = err+0.01
@@ -92,15 +93,18 @@ while True:
     lpTm = time.time() - start_time
     errSum += (err*lpTm)
     print 'Loop Time: ' + str(lpTm), "seconds"
+    clTm += lpTm
     #record output
     outTXT.write(str(Vel) + ', ')
     outTXT.flush()
-    timeTXT.write(str(lpTm) + ', ')
+    timeTXT.write(str(clTm) + ', ')
     timeTXT.flush()
     if(seqNum > 100):
         #Beep! experiment over
         sys.stdout.write('\a')
+        time.sleep(1)
         sys.stdout.flush()
         #close text files
         outTXT.close()
         timeTXT.close()
+        sys.exit

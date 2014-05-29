@@ -2,7 +2,7 @@
 const int channel_a_enable  = 6;
 const int channel_a_input_1 = 4;
 const int channel_a_input_2 = 7;
-const int encoderPinA = 2;
+const int encoderPinA = 3;
 const int encoderPinB = 8;
 int Pos, oldPos, Vel, negflag;
 int Velocity = 0;
@@ -19,20 +19,18 @@ void setup()
   pinMode( channel_a_enable, OUTPUT );  // Channel A enable
   pinMode( channel_a_input_1, OUTPUT ); // Channel A input 1
   pinMode( channel_a_input_2, OUTPUT ); // Channel A input 2
-  Serial.begin(9600);
-  attachInterrupt(0, doEncoder, FALLING); // encoder pin on interrupt 0 (pin 2)
-  Serial.println("Setup Complete");
+  Serial.begin(115200);
+  attachInterrupt(1, doEncoder, FALLING); // encoder pin on interrupt 0 (pin 2)
   digitalWrite(13, HIGH);
   delay(1000);
   digitalWrite(13, LOW);
-  Serial.println("yes");
   lastMillis = millis();
 }
 
 void loop()
 {
   uint8_t oldSREG = SREG;
-  cli();
+  interrupts();
   Pos = encoderPos;
 
 
@@ -52,13 +50,19 @@ void loop()
     Serial.write('/n');
     oldPos = Pos;
     lastMillis = millis();
-    negflag = Serial.read();
-    Vel = Serial.read();
-    if(negflag ==2){
-      Vel = -1*Vel;
+    if(Serial.available()>=2){
+      digitalWrite(13, HIGH);
+      negflag = Serial.read();
+      Vel = Serial.read();
+      Velocity = Vel;
+      if(negflag ==2){
+        Velocity = -1*Velocity;
+      }
+
     }
-    Velocity = Vel;
     writeMotor(Velocity);
+    Serial.println("Hello!");
+
   }
 
 }
@@ -70,10 +74,12 @@ int isNegative(int x){
 /////////////////////
 void doEncoder()
 {
+  noInterrupts();
   if (digitalRead(encoderPinA) == digitalRead(encoderPinB))
     encoderPos++; // count up if both encoder pins are the same
   else
     encoderPos--; //count down if pins are different
+  interrupts();
 }
 /////////////////////
 void writeMotor(int Vel)
@@ -89,5 +95,6 @@ void writeMotor(int Vel)
     digitalWrite( channel_a_input_2, HIGH);
   }
 }
+
 
 
