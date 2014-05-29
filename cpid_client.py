@@ -6,22 +6,23 @@ import time
 import serial
 
 
+
 SetPoint = 100
 lpTm = 1
 VelScale = 12 #value to scale encoder with H-Bridge/DC Motor
 errSum = errLast = seqNum = err = effort = Pos = OldPos = Vel = OldVel = 0
-#serial connection with Arduino
-ser = serial.Serial('/dev/tty.usbmodem641', 9600)
 # Create a TCP/IP socket
 TCP_IP = '127.0.0.1' #'cpid.io'
 TCP_PORT = 5005
 outTXT = open('OutPut.txt', 'w')
+outTXT.write('hi')
 timeTXT = open('Time.txt', 'w')
 ###############################
 ############CPID###############
 ###############################
+#serial connection with Arduino
+ser = serial.Serial('/dev/tty.usbmodem641', 9600)
 print('Setup Complete')
-
 
 while True:
     start_time = time.time()
@@ -93,7 +94,13 @@ while True:
     print 'Loop Time: ' + str(lpTm), "seconds"
     #record output
     outTXT.write(str(Vel) + ', ')
+    outTXT.flush()
     timeTXT.write(str(lpTm) + ', ')
-    if(seqNum >100):
+    timeTXT.flush()
+    if(seqNum > 100):
+        #Beep! experiment over
+        sys.stdout.write('\a')
+        sys.stdout.flush()
+        #close text files
         outTXT.close()
         timeTXT.close()

@@ -4,7 +4,8 @@ const int channel_a_input_1 = 4;
 const int channel_a_input_2 = 7;
 const int encoderPinA = 2;
 const int encoderPinB = 8;
-int Pos, oldPos, Vel, negflag, Velocity;
+int Pos, oldPos, Vel, negflag;
+int Velocity = 0;
 volatile int encoderPos = 0; // variables changed within interrupts are volatile
 unsigned long lastMillis;
 void setup()
@@ -29,7 +30,6 @@ void setup()
 }
 
 void loop()
-
 {
   uint8_t oldSREG = SREG;
   cli();
