@@ -4,7 +4,7 @@ const int channel_a_input_1 = 4;
 const int channel_a_input_2 = 7;
 const int encoderPinA = 2;
 const int encoderPinB = 8;
-int Pos, oldPos, Vel, negflag;
+int Pos, oldPos, Vel, negflag, Velocity;
 volatile int encoderPos = 0; // variables changed within interrupts are volatile
 unsigned long lastMillis;
 void setup()
@@ -34,11 +34,12 @@ void loop()
   uint8_t oldSREG = SREG;
   cli();
   Pos = encoderPos;
-  
-  if (Pos%1000 ==0){ //hacky way to prevent apparant empty byte
+
+
+  if (Pos%1000 ==0){ //empty value jitter
     Pos = Pos+1;
   }
-  
+
   SREG = oldSREG;
   if(millis() > lastMillis+100)
   {
@@ -56,7 +57,8 @@ void loop()
     if(negflag ==2){
       Vel = -1*Vel;
     }
-    writeMotor(Vel);
+    Velocity = Vel;
+    writeMotor(Velocity);
   }
 
 }
@@ -76,7 +78,7 @@ void doEncoder()
 /////////////////////
 void writeMotor(int Vel)
 {
-  if(Vel < 0){ //this is flipped so encoder output makes sense
+  if(Vel < 0){ 
     analogWrite( channel_a_enable, Vel);
     digitalWrite( channel_a_input_1, HIGH);
     digitalWrite( channel_a_input_2, LOW);
@@ -87,4 +89,5 @@ void writeMotor(int Vel)
     digitalWrite( channel_a_input_2, HIGH);
   }
 }
+
 
