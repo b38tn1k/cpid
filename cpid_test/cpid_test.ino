@@ -54,6 +54,7 @@ void loop()
       digitalWrite(13, HIGH);
       negflag = Serial.read();
       Vel = Serial.read();
+      Serial.flush();
       Velocity = Vel;
       if(negflag ==2){
         Velocity = -1*Velocity;
@@ -61,8 +62,6 @@ void loop()
 
     }
     writeMotor(Velocity);
-    Serial.println("Hello!");
-
   }
 
 }

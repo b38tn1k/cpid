@@ -8,7 +8,7 @@ import sys
 import time
 import serial
 # Create a TCP/IP socket
-TCP_IP = '127.0.0.1' #'cpid.io'
+TCP_IP = 'cpid.io'
 TCP_PORT = 5005
 #Create output files
 outTXT = open('OutPut.txt', 'w')
